@@ -1,37 +1,26 @@
-import tkinter as tk
-from tkinter import ttk, messagebox
-import json
-import os
-from datetime import datetime
-import threading
-import time
+from tkinter import *
+
+window = Tk() #instantiate an instance of a window
+window.geometry("500x500")
+window.title("Get It Done")
+
+window.config(background="#8babd4") #Background color
+
+label = Label(window,
+              text="Get It Done",
+              font=('Cooper Hewitt',100, 'bold'),
+              fg='#000000',
+              bg='#8babd4')
+
+label.pack(pady=(60,5))
+
+def click():
+     print("hello")
 
 
-
-
-
-#color plette
-COLORS = {
-    'Baby_Blue': '#8babd4',
-    'Black': '#000000',
-}
-
-class HomePage(tk.Frame):
-    def __init__(self, parent):
-         super().__init__(parent, bg=COLORS['Baby_Blue'])
-
-         #Title
-         title = tk.Label(self, text='Get It Done',
-             font=('Cooper Hewitt', 64, 'bold'),
-             bg=COLORS['#Baby_Blue'],
-             fg=COLORS['Black'])
-         title.pack(pady=(60,5))
-
-window = tk.Tk()
-window.geometry("1000x700")
-window.configure(bg=COLORS['Baby_Blue'])
-
-page = HomePage(window)
-page.pack(fill='both', expand=True)
-
+button = Button(window, text=('Get Started')) #start button
+button.config(command=click)
+button.config(font=('Canva sans',60,'bold'))
+button.config(bg='#ffffcc')
+button.pack(pady=(200,25))
 window.mainloop()#place window on computer screen, listen for events
