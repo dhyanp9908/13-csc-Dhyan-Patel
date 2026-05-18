@@ -12,8 +12,18 @@ label = Label(window,
               fg='#000000',
               bg='#8babd4')
 label.pack(pady=(60,5))
+# black line
+black_line = Tk.Frame(window, background=['#000000'], hight=3, width=400)
+black_line.pack(pady=(0, 10))
+black_line.pack_propagate(False)
 
-button = tkinter.Button(window, text='Get Started', command=window. )
+def click():
+    print ("hello")
+button = Button(window, text=('Get Started')) #start button
+button.config(command=click)
+button.config(font=('Canva sans',60,'bold'))
+button.config(bg='#ffffcc')
+button.pack(pady=(200,25))
 
 
 
