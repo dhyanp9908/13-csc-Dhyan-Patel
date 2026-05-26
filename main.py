@@ -12,8 +12,11 @@ label = Label(window,
               fg='#000000',
               bg='#8babd4')
 label.pack(pady=(60,5))
+
+import tkinter as tk
+
 # black line
-black_line = Tk.Frame(window, background=['#000000'], hight=3, width=400)
+black_line = tk.Frame(window, bg=['#000000'], height=3, width=1000)
 black_line.pack(pady=(0, 10))
 black_line.pack_propagate(False)
 
