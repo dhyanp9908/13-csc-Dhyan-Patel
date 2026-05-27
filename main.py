@@ -28,6 +28,8 @@ button.config(font=('Canva sans',60,'bold'))
 button.config(bg='#ffffcc')
 button.pack(pady=(200,25))
 
+def page:
+
 
 
 window.mainloop()#place window on computer screen, listen for events
