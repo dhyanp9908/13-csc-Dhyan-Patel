@@ -25,13 +25,16 @@ def btn(parent, label, action, w:int=12):
                      width=w, cursor="hand2",
                      activebackground="#E8E2AA")
 class Page1(tk.Frame):
-    def __init__(self, master:Misc, go_to_page2):
+    def __init__(self, master:Misc|None, go_to_page2):
         super().__init__(master, bg=BG)
 
     tk.Label(self, text="Get It Done", font=T_TITLE, bg=BG, fg=DARK).pack(pady=(20, 4))
     tk.Frame(self, bg=DARK, height =2, width=500).pack()
 
-    tk.Label(self, text="")
+    tk.Label(self, text="Stay Organized, Stay Creative",
+             font=T_SUB, bg=BG, fg=DARK). pack(pady=(20,14))
+
+    btn(self, "Get Started")
 
 
 class App(tk.Tk):
