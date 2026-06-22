@@ -34,7 +34,11 @@ class Page1(tk.Frame):
     tk.Label(self, text="Stay Organized, Stay Creative",
              font=T_SUB, bg=BG, fg=DARK). pack(pady=(20,14))
 
-    btn(self, "Get Started")
+    btn(self, "Get Started", go_to_page2, w=16).pack()
+
+    tk.Lable(self, text="Never Give Up",
+             font=("Georgia", 20,"bold"), bg=BG, fg=DARK).pack(pady=26)
+
 
 
 class App(tk.Tk):
