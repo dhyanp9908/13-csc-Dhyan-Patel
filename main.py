@@ -57,7 +57,7 @@ class Page1(tk.Frame):
 
 
 
-
+#page 2 sigh in
 class Page2(tk.Frame):
    def __init__(self, master, go_to_page1, go_to_page3):
        super().__init__(master, bg=BG)
@@ -111,12 +111,11 @@ class Page2(tk.Frame):
        tk.Label(self, text="Do it for you",
                 font=("Georgia", 15), bg=BG, fg=DARK).pack()
 
-
        # nav buttons
        nav = tk.Frame(self, bg=BG)
        nav.pack(fill="x", padx=30, side="bottom", pady=20)
        btn(nav, "Back", go_to_page1, w=8).pack(side="left")
-       # ── NEXT button → validates then goes to page 3 ──────────────────────
+       # NEXT button validates then goes to page 3
        btn(nav, "Next", self._next_clicked, w=8).pack(side="right")
 
 
@@ -128,6 +127,26 @@ class Page2(tk.Frame):
        # pass name + student type to page 3
        self._go3(name, self.type_var.get())
 
+#page 3
+class page3(tk.Frame):
+   def __init__(self, master, go_to_page2, user_name, student_type):
+      super().__init__(master, bg=BG)
+       self.user_name = user_name
+       self.student_type = student_type
+       self.task = []
+       self._build()
+
+   def _build(self):
+      outer = tk.Frame(self, bg=BG)
+      outer.pack(fill="both", expand=True)
+
+#side bar
+side = tk.Frame(outer, bg=SIDEBAR, width=170)
+side.pack(side="left", fill="y")
+side.pack_propagate(False)
+tk.Label(side, text="calender", font=("Georgia", 14, "bold"), bg=SIDEBAR, fg=DARK) .pack(pad=40, 6))
+        tk.Label(side, text="Today's Work", font=T_SM, bg=SIDEBAR, fg=DARK).pack()
+        tk.Label(side, text="Next 7/days work", font=("Georgia", 13, "bold"))
 
 
 
