@@ -128,25 +128,124 @@ class Page2(tk.Frame):
        self._go3(name, self.type_var.get())
 
 #page 3
-class page3(tk.Frame):
+class Page3(tk.Frame):
    def __init__(self, master, go_to_page2, user_name, student_type):
-      super().__init__(master, bg=BG)
+       super().__init__(master, bg=BG)
        self.user_name = user_name
        self.student_type = student_type
-       self.task = []
+       self.tasks = []
        self._build()
 
-   def _build(self):
-      outer = tk.Frame(self, bg=BG)
-      outer.pack(fill="both", expand=True)
 
-#side bar
-side = tk.Frame(outer, bg=SIDEBAR, width=170)
-side.pack(side="left", fill="y")
-side.pack_propagate(False)
-tk.Label(side, text="calender", font=("Georgia", 14, "bold"), bg=SIDEBAR, fg=DARK) .pack(pad=40, 6))
-        tk.Label(side, text="Today's Work", font=T_SM, bg=SIDEBAR, fg=DARK).pack()
-        tk.Label(side, text="Next 7/days work", font=("Georgia", 13, "bold"))
+   def _build(self):
+       outer = tk.Frame(self, bg=BG)
+       outer.pack(fill="both", expand=True)
+
+
+       # sidebar
+       side = tk.Frame(outer, bg=SIDEBAR, width=170)
+       side.pack(side="left", fill="y")
+       side.pack_propagate(False)
+       tk.Label(side, text="Calendar", font=("Georgia", 14, "bold"), bg=SIDEBAR, fg=DARK).pack(pady=(40, 6))
+       tk.Label(side, text="Today's Work", font=T_SM, bg=SIDEBAR, fg=DARK).pack()
+       tk.Label(side, text="Next 7\ndays work", font=("Georgia", 13, "bold"), bg=SIDEBAR, fg=DARK).pack(pady=(8, 0))
+       tk.Label(side, text="🎯", font=("Arial", 46), bg=SIDEBAR).pack(side="bottom", pady=24)
+
+
+       # main area
+       main = tk.Frame(outer, bg=BG)
+       main.pack(side="left", fill="both", expand=True, padx=18, pady=16)
+
+
+       tk.Label(main, text=f"Hello, {self.user_name}!  ({self.student_type})",
+                font=T_SM, bg=BG, fg=DARK).pack(anchor="e")
+       tk.Label(main, text="To do list", font=("Georgia", 26, "bold"), bg=BG, fg=DARK).pack()
+       tk.Frame(main, bg=DARK, height=2, width=440).pack(pady=(2, 10))
+
+
+       # input row
+       inp = tk.Frame(main, bg=BG)
+       inp.pack(fill="x", pady=(0, 8))
+       tk.Label(inp, text="Task:", font=("Georgia", 11, "bold"), bg=BG, fg=DARK).grid(row=0, column=0, padx=(0, 4))
+       self.task_var = tk.StringVar()
+       tk.Entry(inp, textvariable=self.task_var, font=T_BODY, bg=CARD, relief="flat", width=24,
+                insertbackground=DARK).grid(row=0, column=1, padx=4)
+       tk.Label(inp, text="Priority:", font=("Georgia", 11, "bold"), bg=BG, fg=DARK).grid(row=0, column=2, padx=(8, 4))
+       self.prio_var = tk.StringVar(value="Medium")
+       ttk.Combobox(inp, textvariable=self.prio_var, values=["High", "Medium", "Low"],
+                    state="readonly", font=T_SM, width=9).grid(row=0, column=3, padx=4)
+       tk.Label(inp, text="Due:", font=("Georgia", 11, "bold"), bg=BG, fg=DARK).grid(row=0, column=4, padx=(8, 4))
+       self.due_var = tk.StringVar(value=datetime.date.today().strftime("%d/%m/%y"))
+       tk.Entry(inp, textvariable=self.due_var, font=T_BODY, bg=CARD, relief="flat", width=9,
+                insertbackground=DARK).grid(row=0, column=5, padx=4)
+       btn(inp, "Add", self._add, w=5).grid(row=0, column=6, padx=(8, 0))
+
+
+       # three columns
+       cols = tk.Frame(main, bg=BG)
+       cols.pack(fill="both", expand=True)
+
+
+       df = tk.Frame(cols, bg=BG, width=130)
+       df.pack(side="left", fill="y", padx=(0, 8))
+       tk.Label(df, text="Do first", font=("Georgia", 12, "bold"), bg=BG, fg=DARK).pack()
+       tk.Frame(df, bg=DARK, height=2, width=120).pack(pady=2)
+       self.df_frame = tk.Frame(df, bg=BG);
+       self.df_frame.pack(fill="both", expand=True)
+
+
+       mid = tk.Frame(cols, bg=BG)
+       mid.pack(side="left", fill="both", expand=True)
+       self.mid_frame = tk.Frame(mid, bg=BG);
+       self.mid_frame.pack(fill="both", expand=True)
+
+
+       pr = tk.Frame(cols, bg=BG, width=155)
+       pr.pack(side="right", fill="y", padx=(8, 0))
+       tk.Label(pr, text="Priorities", font=("Georgia", 12, "bold"), bg=BG, fg=DARK).pack()
+       tk.Frame(pr, bg=DARK, height=2, width=145).pack(pady=2)
+       self.pr_frame = tk.Frame(pr, bg=BG);
+       self.pr_frame.pack(fill="both", expand=True)
+       tk.Label(pr, text="Due dates", font=T_SM, bg=BG, fg=DARK).pack(pady=(8, 2))
+       tk.Label(pr, text="📅", font=("Arial", 26), bg=BG).pack()
+
+
+       # bottom bar
+       bot = tk.Frame(main, bg=BG)
+       bot.pack(fill="x", pady=(10, 0))
+       btn(bot, "Save", self._save, w=7).pack(side="left", padx=(0, 6))
+       btn(bot, "Back", lambda: self.master.master._show_page2_back(), w=7).pack(side="left")
+       tk.Label(bot, text="Just do it", font=("Georgia", 13, "bold"), bg=BG, fg=DARK).pack(side="left", expand=True)
+       btn(bot, "Done", self._done_check, w=7).pack(side="right")
+
+def _add(self):
+    text = self.task_var.get().strip
+    if not text:
+        messagebox.showwarning("Empty","Please type a task first")
+        return
+    self.tasks.append({"text": text, "prio": self. prio_var.get(),
+                       "due": self.due_var.get(), "done": False,
+                       "var": tk.BooleanVar()})
+    self.task_var.set("")
+    self._refresh()
+
+def _refresh(self):
+    for f in (self.df_frame, self.mid_frame, self.pr_frame):
+        for w in f.winfo_children() : w.destroy()
+
+    for t in slef.task:
+        clr = {"High": "#C0392B", "Medium": DARK, "Low": "#2C7A3A"} [t["prio"]
+        #priorities sidebar
+        tk.Label(self.pr_frame, text=f"o {t['text'] [:15]}", font=T_SM, bg=BG, fg =clr) .pack(anchor="w")
+        #do-first or main list
+        if t["prio"] == "High":
+            self._row(self.df_frame, t)
+        else:
+            self._row(self.mid_frame, t)
+
+def _row(self, parent, task):
+
+
 
 
 
