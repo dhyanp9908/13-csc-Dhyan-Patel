@@ -218,32 +218,67 @@ class Page3(tk.Frame):
        tk.Label(bot, text="Just do it", font=("Georgia", 13, "bold"), bg=BG, fg=DARK).pack(side="left", expand=True)
        btn(bot, "Done", self._done_check, w=7).pack(side="right")
 
-def _add(self):
-    text = self.task_var.get().strip
-    if not text:
-        messagebox.showwarning("Empty","Please type a task first")
-        return
-    self.tasks.append({"text": text, "prio": self. prio_var.get(),
-                       "due": self.due_var.get(), "done": False,
-                       "var": tk.BooleanVar()})
-    self.task_var.set("")
-    self._refresh()
+   def _add(self):
+       text = self.task_var.get().strip()
+       if not text:
+           messagebox.showwarning("Empty", "Please type a task first.")
+           return
+       self.tasks.append({"text": text, "prio": self.prio_var.get(),
+                          "due": self.due_var.get(), "done": False,
+                          "var": tk.BooleanVar()})
+       self.task_var.set("")
+       self._refresh()
 
-def _refresh(self):
-    for f in (self.df_frame, self.mid_frame, self.pr_frame):
-        for w in f.winfo_children() : w.destroy()
+   def _refresh(self):
+       for f in (self.df_frame, self.mid_frame, self.pr_frame):
+           for w in f.winfo_children(): w.destroy()
 
-    for t in slef.task:
-        clr = {"High": "#C0392B", "Medium": DARK, "Low": "#2C7A3A"} [t["prio"]
-        #priorities sidebar
-        tk.Label(self.pr_frame, text=f"o {t['text'] [:15]}", font=T_SM, bg=BG, fg =clr) .pack(anchor="w")
-        #do-first or main list
-        if t["prio"] == "High":
-            self._row(self.df_frame, t)
-        else:
-            self._row(self.mid_frame, t)
 
-def _row(self, parent, task):
+       for t in self.tasks:
+           clr = {"High": "#C0392B", "Medium": DARK, "Low": "#2C7A3A"}[t["prio"]]
+           # priorities sidebar
+           tk.Label(self.pr_frame, text=f"○ {t['text'][:15]}",
+                    font=T_SM, bg=BG, fg=clr).pack(anchor="w")
+           # do-first or main list
+           if t["prio"] == "High":
+               self._row(self.df_frame, t)
+           else:
+               self._row(self.mid_frame, t)
+
+
+   def _row(self, parent, task):
+       row = tk.Frame(parent, bg=BG);
+       row.pack(fill="x", pady=2)
+       tk.Checkbutton(row, variable=task["var"], bg=BG,
+                      command=self._toggle(task)).pack(side="left")
+       txt = f"{task['text']}  [{task['prio']}]  due {task['due']}"
+       font = ("Georgia", 11, "overstrike") if task["done"] else T_SM
+       fg = "#888" if task["done"] else DARK
+       tk.Label(row, text=txt, font=font, bg=BG, fg=fg).pack(side="left")
+
+
+   def _toggle(self, task):
+       def inner(): task["done"] = task["var"].get(); self._refresh()
+
+
+       return inner
+
+
+   def _save(self):
+       with open("tasks.txt", "w") as f:
+           f.write(f"User: {self.user_name} ({self.student_type})\n")
+           f.write(f"Saved: {datetime.datetime.now()}\n\n")
+           for t in self.tasks:
+               f.write(f"{'✓' if t['done'] else '○'} [{t['prio']}] {t['text']}  due {t['due']}\n")
+       messagebox.showinfo("Saved ✅", "Tasks saved to tasks.txt")
+
+
+   def _done_check(self):
+       left = sum(1 for t in self.tasks if not t["done"])
+       if left == 0:
+           messagebox.showinfo("🎉 All done!", "You finished everything!")
+       else:
+           messagebox.showinfo("Keep going!", f"{left} task(s) still to do. You've got this!")
 
 
 
