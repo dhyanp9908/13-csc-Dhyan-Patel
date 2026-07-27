@@ -291,6 +291,21 @@ class App(tk.Tk):
         self.geometry("900x600")
         self.configure(bg=BG)
 
+# Style comboboxes
+       s = ttk.Style(self)
+       s.theme_use("clam")
+       s.configure("TCombobox", fieldbackground=CARD, background=CARD,
+                   foreground=DARK, selectbackground=CARD)
+
+
+       # create all three pages once; show/hide with pack/pack_forget
+       self.p1 = Page1(self, go_to_page2=self._show_p2)
+       self.p2 = Page2(self, go_to_page1=self._show_p1,
+                       go_to_page3=self._show_p3)
+       self.p3 = None  # created on demand (needs name & type)
+
+
+       self._show_p1()
 
 
 
