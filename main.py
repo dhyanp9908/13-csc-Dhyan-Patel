@@ -282,20 +282,20 @@ class Page3(tk.Frame):
 
 
 
-
-
 class App(tk.Tk):
-    def __init__(self):
-        super().__init__()
-        self.title("Get It Done")
-        self.geometry("900x600")
-        self.configure(bg=BG)
+   def __init__(self):
+       super().__init__()
+       self.title("Get It Done")
+       self.geometry("900x600")
+       self.configure(bg=BG)
 
-# Style comboboxes
+
+       # Style comboboxes
        s = ttk.Style(self)
        s.theme_use("clam")
        s.configure("TCombobox", fieldbackground=CARD, background=CARD,
                    foreground=DARK, selectbackground=CARD)
+
 
        # create all three pages once; show/hide with pack/pack_forget
        self.p1 = Page1(self, go_to_page2=self._show_p2)
@@ -306,36 +306,49 @@ class App(tk.Tk):
 
        self._show_p1()
 
-def _hide_all(self):
-    self.p1.pack_forget ()
-    self.p2.pack_forget ()
-    if self.p3:
-        self.p3.pack_forget ()
 
-def _show_p1 (self):
-    self._hide_all()
-    self.p1.pack(fill="both", expand=True)
+   # ── page-switching helpers ────────────────────────────────────────────────
 
-def _show_p2(self):
-    self._hide_all()
-    self.p2.pack(fill="both",expand=True)
 
-def _show_p2_back(self):
-    """Called by page 3's back bytton."""
-    self._show_p2()
+   def _hide_all(self):
+       self.p1.pack_forget()
+       self.p2.pack_forget()
+       if self.p3:
+           self.p3.pack_forget()
 
-def _show_p3(self, name, student_type):
-    #rebuild page 3 with user's details
-    if self.p3:
-        self.p3.destroy()
-    self.p3 = Page3age3 (self,
-                     go_to_page2= self.show
+
+   def _show_p1(self):
+       self._hide_all()
+       self.p1.pack(fill="both", expand=True)
+
+
+   def _show_p2(self):
+       self._hide_all()
+       self.p2.pack(fill="both", expand=True)
+
+
+   def _show_p2_back(self):
+       """Called by Page 3's Back button."""
+       self._show_p2()
+
+
+   def _show_p3(self, name, student_type):
+       # rebuild page 3 with the user's details
+       if self.p3:
+           self.p3.destroy()
+       self.p3 = Page3(self,
+                       go_to_page2=self._show_p2,
+                       user_name=name,
+                       student_type=student_type)
+       self._hide_all()
+       self.p3.pack(fill="both", expand=True)
 
 
 
 
 if __name__ == "__main__":
-    App().mainloop()
+     App().mainloop()
+
 
 
 
