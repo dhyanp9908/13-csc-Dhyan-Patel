@@ -307,8 +307,7 @@ class App(tk.Tk):
        self._show_p1()
 
 
-   # ── page-switching helpers ────────────────────────────────────────────────
-
+   #  page-switching helpers
 
    def _hide_all(self):
        self.p1.pack_forget()
